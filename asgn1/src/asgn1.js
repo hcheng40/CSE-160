@@ -165,9 +165,9 @@ function addActionsForHtmlUI() {
   document.getElementById('circles').onclick = function(){g_selectedType = CIRCLE;};
 
   // Color
-  document.getElementById('redSlider').addEventListener('mouseup', function() {g_selectedColor[0] = this.value/255;});
-  document.getElementById('greenSlider').addEventListener('mouseup', function() {g_selectedColor[1] = this.value/255;});
-  document.getElementById('blueSlider').addEventListener('mouseup', function() {g_selectedColor[2] = this.value/255;});
+  document.getElementById('redSlider').addEventListener('mouseup', function() {g_selectedColor[0] = this.value/100;});
+  document.getElementById('greenSlider').addEventListener('mouseup', function() {g_selectedColor[1] = this.value/100;});
+  document.getElementById('blueSlider').addEventListener('mouseup', function() {g_selectedColor[2] = this.value/100;});
 
   // Size and Segments
   document.getElementById('sizeSlider').addEventListener('mouseup', function() {g_selectedSize = this.value;});
@@ -179,5 +179,77 @@ function addActionsForHtmlUI() {
 
 // My Graph function
 function myGraph() {
+  const vListGreen = [
+    [50, 300, 75, 325, 100, 300], 
+    [50, 300, 100, 300, 100, 250], 
+    [50, 300, 100, 250, 50, 250],
+    [50, 250, 100, 250, 75, 200],
+    [75, 200, 100, 250, 125, 225],
+    [75, 200, 125, 225, 137.5, 175],
 
+    [300, 325, 325, 350, 350, 325],
+    [300, 325, 350, 325, 325, 275],
+    [275, 275, 300, 325, 325, 275],
+    [275, 275, 325, 275, 275, 225],
+
+    [150, 362.5, 200, 375, 250, 362.5],
+    [150, 362.5, 250, 362.5, 150, 300],
+    [150, 300, 250, 362.5, 250, 300], 
+    [125, 300, 150, 362.5, 150, 300],
+    [250, 300, 250, 362.5, 275, 300],
+    [125, 300, 200, 300, 125, 225],
+    [125, 225, 200, 300, 275, 225],
+    [200, 300, 275, 300, 275, 225],
+    [125, 225, 200, 225, 150, 125],
+    [150, 125, 200, 225, 250, 125],
+    [200, 225, 275, 225, 250, 125],
+  ];
+
+  const vListBrown = [
+    [100, 125, 300, 125, 100, 75], 
+    [100, 75, 300, 75, 300, 125], 
+    [125, 75, 275, 75, 125, 25], 
+    [125, 25, 275, 75, 275, 25], 
+  ];
+
+  let newList = [];
+
+  for (var i = 0; i < vListGreen.length; i++) {
+    let triangles = new Triangle();
+    let v = vListGreen[i];
+    triangles.position = convertPosition(v).slice();
+    if (i < 10) {
+      triangles.color = [0.0, 0.5, 0.0, 1.0];
+    } else {
+      triangles.color = [0.0, 0.6, 0.0, 1.0];
+    }
+    newList.push(triangles);
+  }
+  for (var i = 0; i < vListBrown.length; i++) {
+    let triangles = new Triangle();
+    let v = vListBrown[i];
+    triangles.position = convertPosition(v).slice();
+    if (i < 2) {
+      triangles.color = [0.4, 0.2, 0.16, 0.9];
+    } else {
+      triangles.color = [0.4, 0.2, 0.16, 1.0];
+    }
+    newList.push(triangles);
+  }
+
+  g_shapesList = [];
+  gl.clear(gl.COLOR_BUFFER_BIT);
+  for(var i = 0; i < newList.length; i++) {
+    gl.uniform4f(u_FragColor, newList[i].color[0], newList[i].color[1], newList[i].color[2], newList[i].color[3]);
+    drawTriangle(newList[i].position);
+  }
+}
+function convertPosition(v) {
+  let x1 = (v[0] - canvas.width / 2) / (canvas.width / 2);
+  let y1 = (v[1] - canvas.height / 2) / (canvas.height / 2);
+  let x2 = (v[2] - canvas.width / 2) / (canvas.width / 2);
+  let y2 = (v[3] - canvas.height / 2) / (canvas.height / 2);
+  let x3 = (v[4] - canvas.width / 2) / (canvas.width / 2);
+  let y3 = (v[5] - canvas.height / 2) / (canvas.height / 2);
+  return [x1, y1, x2, y2, x3, y3];
 }
