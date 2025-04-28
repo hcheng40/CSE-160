@@ -10,7 +10,9 @@ class Sphere {
   }
 
   generateVertices() {
+    // To store vertices
     let v = [];
+    // To store colors
     let c = [];
     let horizontalStep = this.segments;
     let verticalStep = this.segments;

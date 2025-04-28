@@ -6,6 +6,7 @@ class Cube {
     this.buffer = null;
   }
 
+  // drawCube()
   render() {
     var rgba = this.color;
 
@@ -24,33 +25,33 @@ class Cube {
     // Paass the matrix to u_ModelMatrix attribute
     gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
     
-    gl.uniform4f(u_FragColor, rgba[0]*0.95, rgba[1]*0.95, rgba[2]*0.95, rgba[3]);
     // Front of the cube
+    gl.uniform4f(u_FragColor, rgba[0]*0.95, rgba[1]*0.95, rgba[2]*0.95, rgba[3]);
     drawTriangle3D([0.0,0.0,0.0,  1.0,1.0,0.0,  1.0,0.0,0.0], this.buffer);
     drawTriangle3D([0.0,0.0,0.0,  0.0,1.0,0.0,  1.0,1.0,0.0], this.buffer);
 
-    gl.uniform4f(u_FragColor, rgba[0]*0.8, rgba[1]*0.8, rgba[2]*0.8, rgba[3]);
     // Back
+    gl.uniform4f(u_FragColor, rgba[0]*0.8, rgba[1]*0.8, rgba[2]*0.8, rgba[3]);
     drawTriangle3D([1.0,0.0,1.0,  0.0,1.0,1.0,  0.0,0.0,1.0], this.buffer);
     drawTriangle3D([1.0,0.0,1.0,  1.0,1.0,1.0,  0.0,1.0,1.0], this.buffer);
     
-    gl.uniform4f(u_FragColor, rgba[0]*0.9, rgba[1]*0.9, rgba[2]*0.9, rgba[3]);
     // Left
+    gl.uniform4f(u_FragColor, rgba[0]*0.9, rgba[1]*0.9, rgba[2]*0.9, rgba[3]);
     drawTriangle3D([0.0,0.0,0.0,  0.0,0.0,1.0,  0.0,1.0,0.0], this.buffer);
     drawTriangle3D([0.0,0.0,1.0,  0.0,1.0,1.0,  0.0,1.0,0.0], this.buffer);
     
-    gl.uniform4f(u_FragColor, rgba[0]*0.85, rgba[1]*0.85, rgba[2]*0.85, rgba[3]);
     // Right
+    gl.uniform4f(u_FragColor, rgba[0]*0.85, rgba[1]*0.85, rgba[2]*0.85, rgba[3]);
     drawTriangle3D([1.0,0.0,0.0,  1.0,1.0,1.0,  1.0,0.0,1.0], this.buffer);
     drawTriangle3D([1.0,0.0,0.0,  1.0,1.0,0.0,  1.0,1.0,1.0], this.buffer);
     
-    gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
     // Top
+    gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
     drawTriangle3D([0.0,1.0,0.0,  1.0,1.0,1.0,  1.0,1.0,0.0], this.buffer);
     drawTriangle3D([0.0,1.0,0.0,  0.0,1.0,1.0,  1.0,1.0,1.0], this.buffer);
     
-    gl.uniform4f(u_FragColor, rgba[0]*0.6, rgba[1]*0.6, rgba[2]*0.6, rgba[3]);
     // Bottom
+    gl.uniform4f(u_FragColor, rgba[0]*0.6, rgba[1]*0.6, rgba[2]*0.6, rgba[3]);
     drawTriangle3D([0.0,0.0,1.0,  1.0,0.0,0.0,  1.0,0.0,1.0], this.buffer);
     drawTriangle3D([0.0,0.0,1.0,  0.0,0.0,0.0,  1.0,0.0,0.0], this.buffer);
   }

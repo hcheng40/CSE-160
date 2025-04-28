@@ -27,7 +27,6 @@ let u_GlobalRotateMatrix
 
 let g_globalAngleX = 0
 let g_globalAngleY = 0
-let g_orangeAngle = 0
 let g_headAngleX = 0
 let g_headAngleY = 0
 let g_earAngle = 0
@@ -36,6 +35,9 @@ let g_leg2Angle = 0
 let g_leg3Angle = 0
 let g_leg4Angle = 0
 let g_tailAngle = 0
+let g_orangeAngle = 0
+let g_tongueAngle = 0
+let g_eyelidAngle = 0
 
 let g_headXAnimation = false
 let g_headYAnimation = false
@@ -47,8 +49,10 @@ let g_leg4Animation = false
 let g_tailAnimation = false
 let g_orangeAnimation = false
 
+let shiftKey = false
 
-// Render function
+
+// RenderScene function
 function renderAllShapes() {
   var startTime = performance.now();
 
@@ -79,14 +83,17 @@ function renderAllShapes() {
   var head = new Cube();
   head.color = [0.75, 0.4, 0.13, 1];
   head.matrix.rotate(-g_headAngleX, 0, 0, 1);
-  head.matrix.rotate(g_headAngleY, 90, 0, 1);
-  head.matrix.translate(-0.225, 0.18, -0.5);
+  head.matrix.rotate(g_headAngleY, 1, 0, 0);
+  head.matrix.translate(-0.225, 0.18, -0.45);
   var headNoseMat = new Matrix4(head.matrix);
   var headEarLMat = new Matrix4(head.matrix);
   var headEarRMat = new Matrix4(head.matrix);
   var headEyeMat = new Matrix4(head.matrix);
   var headOrangeMat = new Matrix4(head.matrix);
-  head.matrix.scale(0.45, 0.4, 0.6);
+  var headTongueMat = new Matrix4(head.matrix);
+  var headEyelidLMat = new Matrix4(head.matrix);
+  var headEyelidRMat = new Matrix4(head.matrix);
+  head.matrix.scale(0.45, 0.4, 0.55);
   head.render();
   
   // Nose
@@ -128,7 +135,6 @@ function renderAllShapes() {
   earL.matrix.translate(0, 0.1, 0);
   earL.matrix.scale(0.08, 0.1, 0.06);
   earL.render();
-
   // Right Ear
   var earR = new Sphere();
   earR.color = [0.55, 0.2, 0.05, 1]
@@ -146,7 +152,6 @@ function renderAllShapes() {
   eyeL.matrix.translate(0, 0.27, 0.2);
   eyeL.matrix.scale(0.02, 0.05, 0.05);
   eyeL.render();
-
   // Right Eye
   var eyeR = new Sphere();
   eyeR.color = [0, 0, 0, 1];
@@ -154,7 +159,7 @@ function renderAllShapes() {
   eyeR.matrix.translate(22.5, 0, 0);
   eyeR.render();
 
-  // Legs
+  // Legs (1 ~ 4)
   var legPos = [[-0.25, -0.25, 0.05], [0.13, -0.25, 0.05], [-0.25, -0.25, 0.6], [0.13, -0.25, 0.6]];
   var legAngles = [g_leg1Angle, g_leg2Angle, g_leg3Angle, g_leg4Angle];
   for (var i = 0; i < legPos.length; i++) {
@@ -163,7 +168,7 @@ function renderAllShapes() {
     leg.matrix.translate(legPos[i][0], legPos[i][1], legPos[i][2]);
     leg.matrix.scale(1, -1, 1);
     leg.matrix.translate(0, -0.4, 0);
-    leg.matrix.rotate(legAngles[i], 90, 0, 1);
+    leg.matrix.rotate(legAngles[i], 1, 0, 0);
     leg.matrix.scale(0.13, 0.4, 0.13);
     leg.render();
   };
@@ -182,12 +187,11 @@ function renderAllShapes() {
   orange.color = [1, 0.36, 0.1, 1];
   orange.matrix = headOrangeMat;
   orange.matrix.translate(0.225, 0.5, 0.15);
-  orange.matrix.rotate(g_orangeAngle, 0, 90, 1);
+  orange.matrix.rotate(g_orangeAngle, 0, 1, 0);
   orange.matrix.translate(0.05, 0, 0);
   var orangeeMat = new Matrix4(orange.matrix);
   orange.matrix.scale(0.13, 0.12, 0.13);
   orange.render();
-
   var orangee = new Cube();
   orangee.color = [0.2, 0.7, 0.1, 1];
   orangee.matrix = orangeeMat;
@@ -195,6 +199,36 @@ function renderAllShapes() {
   orangee.matrix.rotate(-30, 0, 0, 1);
   orangee.matrix.scale(0.03, 0.15, 0.03);
   orangee.render();
+
+  // Tongue
+  var tongue = new Cube();
+  tongue.color = [1, 0.25, 0.3, 1];
+  tongue.matrix = headTongueMat;
+  tongue.matrix.translate(0.175, 0.08, 0);
+  tongue.matrix.rotate(-100, 1, 0, 0);
+  tongue.matrix.rotate(90, 0, 1, 0);
+  tongue.matrix.rotate(g_tongueAngle, 0, 0, 1);
+  tongue.matrix.scale(0.04, 0.175, 0.1);
+  if (shiftKey) {
+    tongue.render();
+  }
+
+  // Eyelid
+  var eyelidL = new Cube();
+  eyelidL.color = [0.75, 0.4, 0.13, 1];
+  eyelidL.matrix = headEyelidLMat;
+  eyelidL.matrix.translate(-0.02, 0.32, 0.15);
+  eyelidL.matrix.scale(0.02, 0.05, 0.1);
+  eyelidL.matrix.scale(1, g_eyelidAngle, 1);
+  eyelidL.render();
+  var eyelidR = new Cube();
+  eyelidR.color = [0.75, 0.4, 0.13, 1];
+  eyelidR.matrix = headEyelidRMat;
+  eyelidR.matrix.translate(0.45, 0.32, 0.15);
+  eyelidR.matrix.scale(0.02, 0.05, 0.1);
+  eyelidR.matrix.scale(1, g_eyelidAngle, 1);
+  eyelidR.render();
+
 
   // FPS
   var duration = performance.now() - startTime;
@@ -207,19 +241,19 @@ function updateAnimationAngles() {
     g_headAngleX = 15 * Math.sin(g_seconds);
   }
   if (g_headYAnimation) {
-    g_headAngleY = 25 * Math.sin(g_seconds*1.5);
+    g_headAngleY = 25 * Math.sin(g_seconds * 1.5);
   }
   if (g_earAnimation) {
-    g_earAngle = 45 * Math.sin(g_seconds);
+    g_earAngle = 45 * Math.sin(g_seconds * 1.4);
   }
   if (g_leg1Animation) {
-    g_leg1Angle = 45 * Math.sin(g_seconds * 1.3);
+    g_leg1Angle = 40 * Math.sin(g_seconds * 1.3) - 15;
   }
   if (g_leg2Animation) {
-    g_leg2Angle = 45 * Math.sin((g_seconds + Math.PI / 2) * 1.3);
+    g_leg2Angle = 40 * Math.sin((g_seconds + Math.PI / 2) * 1.3) - 15;
   }
   if (g_leg3Animation) {
-    g_leg3Angle = 45 * Math.sin((g_seconds + Math.PI) * 1.3);
+    g_leg3Angle = 45 * Math.sin((g_seconds + Math.PI / 3 * 2) * 1.3);
   }
   if (g_leg4Animation) {
     g_leg4Angle = 45 * Math.sin((g_seconds + Math.PI / 2 * 3) * 1.3);
@@ -228,7 +262,11 @@ function updateAnimationAngles() {
     g_tailAngle = 90 * Math.sin(g_seconds * 1.3);
   }
   if (g_orangeAnimation) {
-    g_orangeAngle = 180 * Math.sin(g_seconds*1.2);
+    g_orangeAngle = 150 * g_seconds;
+  }
+  if (shiftKey) { 
+    g_tongueAngle = 45 * Math.sin(g_seconds * 1.3);
+    g_eyelidAngle = -1.5 * Math.sin(g_seconds * 1.2);
   }
 }
 
@@ -261,8 +299,8 @@ function main() {
   addActionsForHtmlUI();
   
   // Call function to draw when mouse click
-  canvas.onmousedown = function(ev) { if (ev.shiftKey == 1) { shiftClick(ev); } else { lastPosition(ev); } };
-  canvas.onmouseup = function() {is_dragging = false;};
+  canvas.onmousedown = function(ev) { if (ev.shiftKey == 1 && ev.buttons == 1) { shiftClick(ev); } else { lastPosition(ev); } };
+  canvas.onmouseup = function() { is_dragging = false; };
   canvas.onmousemove = function(ev) { if (ev.buttons == 1) drag(ev); };
 
   // Clear color for canvas
@@ -283,7 +321,7 @@ function lastPosition(ev) {
   preY = ev.clientY;
 }
 
-// Click event (Draw)
+// Drag event
 function drag(ev) {
   if (!is_dragging) return;
   g_globalAngleX = (g_globalAngleX - (ev.clientX - preX) / 2) % 360;
@@ -292,8 +330,9 @@ function drag(ev) {
   preY = ev.clientY;
 }
 
+// Shift click event
 function shiftClick(ev) {
-
+  shiftKey = !shiftKey;
 }
 
 
@@ -323,7 +362,6 @@ function addActionsForHtmlUI() {
   document.getElementById('animationOrangeOnButton').onclick = function() {g_orangeAnimation = true;};
   document.getElementById('animationOrangeOffButton').onclick = function() {g_orangeAnimation = false;};
   
-
   // Angle sliders
   document.getElementById('headXSlider').addEventListener('mousemove', function() {g_headAngleX = this.value;});
   document.getElementById('headYSlider').addEventListener('mousemove', function() {g_headAngleY = this.value;});
