@@ -38,6 +38,7 @@ let g_tailAngle = 0
 let g_orangeAngle = 0
 let g_tongueAngle = 0
 let g_eyelidAngle = 0
+let g_salivaAngle = 0
 
 let g_headXAnimation = false
 let g_headYAnimation = false
@@ -208,10 +209,30 @@ function renderAllShapes() {
   tongue.matrix.rotate(-100, 1, 0, 0);
   tongue.matrix.rotate(90, 0, 1, 0);
   tongue.matrix.rotate(g_tongueAngle, 0, 0, 1);
+  var tongueMat = new Matrix4(tongue.matrix);
   tongue.matrix.scale(0.04, 0.175, 0.1);
   if (shiftKey) {
     tongue.render();
   }
+
+  // Saliva
+  var saliva = new Sphere();
+  saliva.color = [0.4, 0.7, 1, 1];
+  saliva.matrix = tongueMat;
+  saliva.matrix.translate(0.057, 0.18, 0.015);
+  saliva.matrix.rotate(g_salivaAngle, 0, 0, 1);
+  saliva.matrix.scale(0.035, 0.02, 0.02);
+  if (shiftKey) {
+    saliva.render();
+  }
+  var saliva2 = new Sphere();
+  saliva2.color = [0.4, 0.7, 1, 1];
+  saliva2.matrix = tongueMat;
+  saliva2.matrix.translate(0.38, 0, 0);
+  saliva2.matrix.scale(0.75, 1.2, 1.2);
+  if (shiftKey) {
+    saliva2.render();
+  } 
 
   // Eyelid
   var eyelidL = new Cube();
@@ -228,7 +249,6 @@ function renderAllShapes() {
   eyelidR.matrix.scale(0.02, 0.05, 0.1);
   eyelidR.matrix.scale(1, g_eyelidAngle, 1);
   eyelidR.render();
-
 
   // FPS
   var duration = performance.now() - startTime;
@@ -267,6 +287,7 @@ function updateAnimationAngles() {
   if (shiftKey) { 
     g_tongueAngle = 45 * Math.sin(g_seconds * 1.3);
     g_eyelidAngle = -1.5 * Math.sin(g_seconds * 1.2);
+    g_salivaAngle = -40 * Math.sin(g_seconds * 1.3);
   }
 }
 
