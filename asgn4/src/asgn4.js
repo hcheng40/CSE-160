@@ -210,8 +210,8 @@ function renderAllShapes() {
   gl.uniform1f(u_ks, g_ks);
   gl.uniform1i(u_spotlightOn, g_spotlightOn);
   gl.uniform3f(u_spotPos, g_spotlightPos[0], g_spotlightPos[1], g_spotlightPos[2]);
-  const dirLength = Math.sqrt(g_spotDir[0]*g_spotDir[0] + g_spotDir[1]*g_spotDir[1] + g_spotDir[2]*g_spotDir[2]);
-  gl.uniform3f(u_spotDir, g_spotDir[0]/dirLength, g_spotDir[1]/dirLength, g_spotDir[2]/dirLength);
+  const dirD = Math.sqrt(g_spotDir[0]*g_spotDir[0] + g_spotDir[1]*g_spotDir[1] + g_spotDir[2]*g_spotDir[2]);
+  gl.uniform3f(u_spotDir, g_spotDir[0]/dirD, g_spotDir[1]/dirD, g_spotDir[2]/dirD);
   gl.uniform1f(u_spotCosCutoff, Math.cos(10  *Math.PI / 180));
   gl.uniform1f(u_spotExp, 20.0);
 
@@ -265,6 +265,7 @@ function renderAllShapes() {
   // Map
   drawMap();
 
+  // Capybara
   if (g_showCapybara) {
     capybara(-2, 0, -3, 180);
     capybara(5, 0, -2, 190);
@@ -317,7 +318,6 @@ function main() {
   canvas.onmouseup = function() { is_dragging = false; };
   canvas.onmousemove = function(ev) { if (ev.buttons == 1) drag(ev); };
 
-  // document.onkeydown = keydown;
   document.addEventListener("keydown", (ev) => {
     keys.add(ev.keyCode);
     // console.log(ev.keyCode);
@@ -346,13 +346,11 @@ let preY = 0
 let dx = 0
 let dy = 0
 
-// Last position
 function lastPosition(ev) {
   is_dragging = true;
   preX = ev.clientX;
   preY = ev.clientY;
 }
-// Drag event
 function drag(ev) {
   if (!is_dragging) return;
   dx = ev.clientX - preX;
@@ -616,17 +614,13 @@ function sendTextToHtml(text, htmlID) {
   htmlEle.innerHTML = text;
 }
 
-
 function initTextures() {
-  // Create the image object
   var image0 = new Image();
   if (!image0) {
     console.log('Failed to create the image0 object');
     return false;
   }
-  // Register the event handler to be called on loading an image
   image0.onload = function() {sendTextureToGLSL(image0, 0);};
-  // Tell the browser to load an image
   image0.src = '../assets/sky.jpg';
 
   var image1 = new Image();
@@ -692,6 +686,7 @@ function capybara(offsetX = 0, offsetY = 0, offsetZ = 0, rotation = 0) {
   body.matrix.rotate(rotation, 0, 1, 0);
   body.matrix.translate(-0.3 + offsetX, -0.25 + offsetY, 0.0 + offsetZ);
   body.matrix.scale(0.6, 0.5, 0.8);
+  if (g_normalOn) body.textureNum = -3;
   body.render();
 
   const neck = new Cube();
@@ -699,6 +694,7 @@ function capybara(offsetX = 0, offsetY = 0, offsetZ = 0, rotation = 0) {
   neck.matrix.rotate(rotation, 0, 1, 0);
   neck.matrix.translate(-0.225 + offsetX, 0 + offsetY, -0.111 + offsetZ);
   neck.matrix.scale(0.45, 0.25, 0.111);
+  if (g_normalOn) neck.textureNum = -3;
   neck.render();
 
   const headX = -0.225 + offsetX, headY = -0.07 + offsetY, headZ = -0.45 + offsetZ;
@@ -707,6 +703,7 @@ function capybara(offsetX = 0, offsetY = 0, offsetZ = 0, rotation = 0) {
   head.matrix.rotate(rotation, 0, 1, 0);
   head.matrix.translate(headX, headY, headZ);
   head.matrix.scale(0.45, 0.4, 0.55);
+  if (g_normalOn) head.textureNum = -3;
   head.render();
   
   const nose = new Cube();
@@ -714,6 +711,7 @@ function capybara(offsetX = 0, offsetY = 0, offsetZ = 0, rotation = 0) {
   nose.matrix.rotate(rotation, 0, 1, 0);
   nose.matrix.translate(headX + 0.1, headY + 0.05, headZ - 0.025);
   nose.matrix.scale(0.25, 0.2, 0.05);
+  if (g_normalOn) nose.textureNum = -3;
   nose.render();
 
   const nostril1 = new Cube();
@@ -721,12 +719,14 @@ function capybara(offsetX = 0, offsetY = 0, offsetZ = 0, rotation = 0) {
   nostril1.matrix.rotate(rotation, 0, 1, 0);
   nostril1.matrix.translate(headX + 0.15, headY + 0.15, headZ - 0.028);
   nostril1.matrix.scale(0.03, 0.04, 0.01);
+  if (g_normalOn) nostril1.textureNum = -3;
   nostril1.render();
   const nostril2 = new Cube();
   nostril2.color = [0, 0, 0, 1];
   nostril2.matrix.rotate(rotation, 0, 1, 0);
   nostril2.matrix.translate(headX + 0.25, headY + 0.15, headZ - 0.028);
   nostril2.matrix.scale(0.03, 0.04, 0.01);
+  if (g_normalOn) nostril2.textureNum = -3;
   nostril2.render();
 
   const ear = new Sphere();
@@ -734,6 +734,7 @@ function capybara(offsetX = 0, offsetY = 0, offsetZ = 0, rotation = 0) {
   ear.matrix.rotate(rotation, 0, 1, 0);
   ear.matrix.translate(headX + 0.08, headY + 0.48, headZ + 0.4);
   ear.matrix.scale(0.08, 0.1, 0.06);
+  if (g_normalOn) ear.textureNum = -3;
   ear.render();
   ear.matrix = new Matrix4();
   ear.matrix.rotate(rotation, 0, 1, 0);
@@ -746,6 +747,7 @@ function capybara(offsetX = 0, offsetY = 0, offsetZ = 0, rotation = 0) {
   eye.matrix.rotate(rotation, 0, 1, 0);
   eye.matrix.translate(headX - 0.0, headY + 0.28, headZ + 0.25);
   eye.matrix.scale(0.02, 0.05, 0.05);
+  if (g_normalOn) eye.textureNum = -3;
   eye.render();
   eye.matrix = new Matrix4();
   eye.matrix.rotate(rotation, 0, 1, 0);
@@ -755,6 +757,7 @@ function capybara(offsetX = 0, offsetY = 0, offsetZ = 0, rotation = 0) {
 
   const leg = new Cube();
   leg.color = [0.55, 0.2, 0.05, 1];
+  if (g_normalOn) leg.textureNum = -3;
   const legPositions = [
     [-0.25 + offsetX, -0.65 + offsetY, 0.05 + offsetZ],
     [0.13 + offsetX, -0.65 + offsetY, 0.05 + offsetZ],
@@ -774,6 +777,7 @@ function capybara(offsetX = 0, offsetY = 0, offsetZ = 0, rotation = 0) {
   tail.matrix.rotate(rotation, 0, 1, 0);
   tail.matrix.translate(0 + offsetX, 0.25 + offsetY, 0.85 + offsetZ);
   tail.matrix.scale(0.1, 0.1, 0.1);
+  if (g_normalOn) tail.textureNum = -3;
   tail.render();
 }
 
