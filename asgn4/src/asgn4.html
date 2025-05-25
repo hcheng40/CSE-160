@@ -15,12 +15,10 @@ hcheng40@ucsc.edu
     <script src="../lib/webgl-utils.js"></script>
     <script src="../lib/webgl-debug.js"></script>
     <script src="../lib/cuon-utils.js"></script>
-    <script src="../lib/cuon-matrix.js"></script>
-    <script src="Point.js"></script>
-    <script src="Triangle.js"></script>
-    <script src="Circle.js"></script>
+    <script src="../lib/cuon-matrix-cse160.js"></script>
     <script src="Cube.js"></script>
     <script src="Sphere.js"></script>
+    <script src="Camera.js"></script>
     <script src="asgn4.js"></script>
 
     <br>
@@ -31,80 +29,55 @@ hcheng40@ucsc.edu
     <button type="button" id="normalOff">Normal Off</button>
     <p>
 
-
     <p>
-    <label style="display: inline-block; width: 60px; "> Head1 </label>
-    <input type="range" min="-15" max="15" value="0" class="slider" id="headXSlider">      
-    Animation: 
-    <button type="button" id="animationHeadXOnButton">ON</button>
-    <button type="button" id="animationHeadXOffButton">OFF</button>
+    <button type="button" id="lightOn">Light ON</button>
+    <button type="button" id="lightOff">Light OFF</button>
     <p>
 
     <p>
-    <label style="display: inline-block; width: 60px; "> Head2 </label>
-    <input type="range" min="-25" max="25" value="0" class="slider" id="headYSlider">      
-    Animation: 
-    <button type="button" id="animationHeadYOnButton">ON</button>
-    <button type="button" id="animationHeadYOffButton">OFF</button>
+    <button type="button" id="lightMovingOn">Light Moving ON</button>
+    <button type="button" id="lightMovingOff">Light Moving OFF</button>
     <p>
 
     <p>
-    <label style="display: inline-block; width: 60px; "> Ears </label>
-    <input type="range" min="-45" max="45" value="0" class="slider" id="earSlider">      
-    Animation: 
-    <button type="button" id="animationEarOnButton">ON</button>
-    <button type="button" id="animationEarOffButton">OFF</button>
+    <button type="button" id="spotlightOn">Spotlight ON</button>
+    <button type="button" id="spotlightOff">Spotlight OFF</button>
     <p>
+    
+    <label style="display: inline-block; width: 60px;"> Light X</label>
+    <input type="range" min="-2500" max="2500" value="0" class="slider" id="lightXSlider">
+
+    <label style="display: inline-block; width: 60px;"> Light Y</label>
+    <input type="range" min="-1500" max="1500" value="0" class="slider" id="lightYSlider">
+
+    <label style="display: inline-block; width: 60px;"> Light Z</label>
+    <input type="range" min="-2500" max="2500" value="0" class="slider" id="lightZSlider">
 
     <p>
-    <label style="display: inline-block; width: 60px; "> Leg1 </label>
-    <input type="range" min="-45" max="45" value="0" class="slider" id="leg1Slider">      
-    Animation: 
-    <button type="button" id="animationLeg1OnButton">ON</button>
-    <button type="button" id="animationLeg1OffButton">OFF</button>
+    <label style="display: inline-block; width: 80px;">Ambient</label>
+    <input type="range" min="0" max="1" step="0.01" value="0.3" class="slider" id="ambientSlider">
     <p>
+    
+    <label style="display: inline-block; width: 80px;">Diffuse</label>
+    <input type="range" min="0" max="1" step="0.01" value="0.7" class="slider" id="diffuseSlider">
     <p>
-    <label style="display: inline-block; width: 60px; "> Leg2 </label>
-    <input type="range" min="-45" max="45" value="0" class="slider" id="leg2Slider">      
-    Animation: 
-    <button type="button" id="animationLeg2OnButton">ON</button>
-    <button type="button" id="animationLeg2OffButton">OFF</button>
-    <p>
-    <p>
-    <label style="display: inline-block; width: 60px; "> Leg3 </label>
-    <input type="range" min="-45" max="45" value="0" class="slider" id="leg3Slider">      
-    Animation: 
-    <button type="button" id="animationLeg3OnButton">ON</button>
-    <button type="button" id="animationLeg3OffButton">OFF</button>
-    <p>
-    <p>
-    <label style="display: inline-block; width: 60px; "> Leg4 </label>
-    <input type="range" min="-45" max="45" value="0" class="slider" id="leg4Slider">      
-    Animation: 
-    <button type="button" id="animationLeg4OnButton">ON</button>
-    <button type="button" id="animationLeg4OffButton">OFF</button>
-    <p>
-
-    <p>
-    <label style="display: inline-block; width: 60px; "> Tail </label>
-    <input type="range" min="-90" max="90" value="0" class="slider" id="tailSlider">      
-    Animation: 
-    <button type="button" id="animationTailOnButton">ON</button>
-    <button type="button" id="animationTailOffButton">OFF</button>
-    <p>
-      
-    <p>
-    <label style="display: inline-block; width: 60px; "> Orange </label>
-    <input type="range" min="-180" max="180" value="0" class="slider" id="orangeSlider">
-    Animation: 
-    <button type="button" id="animationOrangeOnButton">ON</button>
-    <button type="button" id="animationOrangeOffButton">OFF</button>
+    
+    <label style="display: inline-block; width: 80px;">Specular</label>
+    <input type="range" min="0" max="1" step="0.01" value="1.0" class="slider" id="specularSlider">
     <p>
     
     <p>
-    Camera Angle <input type="range" min="0" max="360" value="5" class="slider" id="angleSlider">
+    <label style="display: inline-block; width: 120px;"> Camera Angle </label>
+    <input type="range" min="0" max="360" value="5" class="slider" id="angleSlider">
     <p>
 
-    <p> Hold 'Shift' and click to turn On/Off poke animation </p>
+    <p>
+    <button type="button" id="showCapybara">Show Capybara</button>
+    <p>
+
+    <br>
+    <p>Use W, A, S, D to move the camera</p>
+    <p>Use Up, Down, Left, Right Arrow or mouse drag to rotate the camera</p>
+
   </body>
 </html>
