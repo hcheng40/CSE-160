@@ -1,0 +1,37 @@
+<!--
+Hao-Tien Cheng
+hcheng40@ucsc.edu
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>three.js world</title>
+    <link rel="stylesheet" href="world.css">
+  </head>
+  
+  <body>
+    <div id="blocker">
+			<div id="instructions">
+				<p style="font-size:50px">Click to start</p>
+				<p style="font-size:30px">
+					Move: WASD<br><br>
+					Jump: SPACE<br><br>
+          Hold Shift: RUN<br><br>
+          Shoot: LEFT CLICK
+				</p>
+			</div>
+		</div>
+    <canvas id="canvas"></canvas>
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@v0.176.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.176.0/examples/jsm/"
+      }
+    }
+    </script>
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
